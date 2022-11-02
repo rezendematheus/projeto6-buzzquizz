@@ -27,7 +27,18 @@
     font-weight: 700;
     font-size: 20px;
 
-    color: black;
+    
 
     line-height: 23px;
+}
+
+
+.correct {
+
+    color: green;
+}
+
+.wrong {
+
+    color: red;
 }

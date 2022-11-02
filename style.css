@@ -15,6 +15,16 @@ background-color: #E5E5E5;
     align-items: center;
 }
 
+.selected {
+
+    border: 2px solid green;
+}
+
+.diselected {
+
+    border: 2px solid red;
+}
+
 .main-header-container-bottom {
 
     height: 227px;
