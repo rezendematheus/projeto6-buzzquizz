@@ -3,8 +3,11 @@
 }
 
 body{
-background-color: #E5E5E5;
+    background-color: #FAFAFA;
+    font-family: 'Roboto', sans-serif;
 }
+
+
 .main-header-container-top {
     background-color: red;
 
@@ -14,7 +17,150 @@ background-color: #E5E5E5;
     justify-content: center;
     align-items: center;
 }
+/* Tela 1 */
 
+.tela-1{
+
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.content-1{
+
+    padding-top: 77px;
+    width: 73%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+.criar-quizz p{
+
+    width: 250px;
+
+    font-size: 20px;
+    line-height: 23px;
+
+    text-align: center;
+    color: #B9B9B9;
+    
+}
+.criar-quizz button{
+
+    width: 151px;
+    height: 40px;
+
+    color: #EC362D;
+
+    border: 1px dashed #EC362D;
+    border-radius: 50px;
+
+    background-color: inherit;
+}
+.criar-quizz{
+
+    width: 100%;
+    height: 181px;
+
+    border: 1px dashed #d5d5d5;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.seus-quizzes p{
+    width: 139px;
+
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.seus-quizzes ion-icon{
+
+    width: 30px;
+    height: 30px;
+
+    color: #EC362D;
+    background-color: inherit;
+}
+.todos-quizzes{
+
+     width: 100%;
+     height: 409px;
+
+    padding-top: 77px;
+}
+.todos-quizzes p{
+
+    font-weight: 700;
+    font-size: 20px;
+
+    display: flex;
+    align-items: center;
+
+}
+
+.quizz-container {
+
+    width: 100%;
+    max-height: 374px;
+    height: fit-content;
+
+    gap: 12px 15px;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    margin-top: 13px;
+
+    overflow-y: scroll;
+}
+.go-quizz{
+    position: relative;
+
+    width: 340px;
+    height: 181px;
+
+    border-radius: 5px;
+
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0.8) 100%);
+}
+.go-quizz p{
+    position: absolute;
+
+    width: 309px;
+    height: 54px;
+
+    font-size: 19px;
+
+    display: flex;
+    align-items: center;
+
+    bottom:0px;
+    left: 17px;
+   
+}
+.go-quizz img{
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+
+    border-radius: 5px;
+}
+
+
+/* Tela 2 */
 .selected {
 
     border: 2px solid green;
@@ -96,4 +242,8 @@ background-color: #E5E5E5;
 
     width: 330px;
     height: 175px;
+}
+
+.not-display{
+    display: none;
 }
