@@ -1,0 +1,33 @@
+.main-header-container-top {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 37px;
+
+    color: white;
+}
+
+.main-header-container-bottom h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 39px;
+
+    color: white;
+}
+
+.quest-title h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 23px;
+
+    color: white;
+}
+
+.option p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+
+    color: black;
+
+    line-height: 23px;
+}
