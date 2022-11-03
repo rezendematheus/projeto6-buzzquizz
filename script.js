@@ -22,6 +22,7 @@ function listarQuizz(response){
 }
 
 function quizzList () {
+
     let body = document.querySelector("body")
     body.innerHTML += 
     `<div class="tela-1">
@@ -32,9 +33,7 @@ function quizzList () {
             </div>
             <div class="seus-quizzes not-display">
                 <p>Seus Quizzes <ion-icon onclick="criarQuizz()" name="add-circle"></ion-icon></p>
-                <div class = "quizz-container">
-
-                </div>
+                <div class = "quizz-container"></div>
             </div>
             <div class="todos-quizzes">
                 <p>Todos os Quizzes</p>
@@ -43,12 +42,21 @@ function quizzList () {
         </div>
     </div>`
 }
+
 function getList() {
+
     axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
     .catch(retornaErro)
     .then(listarQuizz)
+
 }
 
+function toggleCriar(){
+    if(document.querySelector(".quizz-container").innerHTML ==! ''){
+       document.querySelector(".criar-quizz").classList.add("not-display")
+       document.querySelector(".seus-quizzes").classList.remove("not-display") 
+    }
+}
 //getList()
 
 
