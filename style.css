@@ -235,6 +235,6 @@ body{
     height: 175px;
 }
 
-.not-display{
+.hidden{
     display: none;
 }

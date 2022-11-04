@@ -14,19 +14,14 @@ function listarQuizz(response) {
     console.log(response.data)
     response.data.forEach(element => {
         list.querySelector(".quizz-container").innerHTML +=
-            `<div class="go-quizz" onclick="">
+            `<div class="go-quizz" onclick="getQuizz(${element.id})">
             <img src="${element.image}" alt="">
             <p>${element.title}</p>
         </div>`
     });
 }
 
-<<<<<<< HEAD
 function quizzList() {
-=======
-function quizzList () {
-
->>>>>>> 6e1b5cb674cb53d8598305ff091b612ceeb4c79e
     let body = document.querySelector("body")
     body.innerHTML +=
         `<div class="tela-1">
@@ -60,15 +55,13 @@ function toggleCriar(){
        document.querySelector(".seus-quizzes").classList.remove("not-display") 
     }
 }
-//getList()
+getList()
 
 
 //Tela 2 
-function getQuizz() {
+function getQuizz(quizzId) {
 
-
-
-    const quizz = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/1')
+    const quizz = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzId}`)
 
     quizz.then(showQuizz)
 }
@@ -76,7 +69,12 @@ function getQuizz() {
 function showQuizz(quizz) {
     let header = document.querySelector(".main-header")
     let mainContent = document.querySelector(".main-content")
+    let screenOne = document.querySelector(".tela-1")
 
+    screenOne.classList.add("hidden")
+    mainContent.classList.remove("hidden")
+
+    mainContent.innerHTML = ""
     header.innerHTML += `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
 rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bottom">
 <h1>${quizz.data.title}</h1>
@@ -178,6 +176,4 @@ if ( answer1.classList.contains ("unselected") || answer2.classList.contains ("u
 
 
 }
-
-getQuizz()
 
