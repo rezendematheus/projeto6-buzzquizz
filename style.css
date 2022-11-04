@@ -306,3 +306,54 @@ body{
     margin: 10px auto 0 auto;
     
 }
+/* Tela 3 */
+.tela3{
+
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.container3{
+
+    width: 41.7%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+
+}
+.container3 strong:nth-child(2){
+    text-align: center;
+}
+.nvl {
+
+    display: flex;
+    flex-direction: column;
+
+
+}
+input {
+
+    width: 100%;
+    height: 46px;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+
+}
+input::placeholder {
+
+    font-style: italic;
+    color: #bababa;
+    font-size: 19px;
+
+}
+
+.not-display{
+
+    display: none;
+
+}

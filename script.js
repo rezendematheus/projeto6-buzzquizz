@@ -62,10 +62,10 @@ function getList() {
         .then(listarQuizz)
 }
 
-function toggleCriar() {
-    if (document.querySelector(".quizz-container").innerHTML == ! '') {
-        document.querySelector(".criar-quizz").classList.add("not-display")
-        document.querySelector(".seus-quizzes").classList.remove("not-display")
+function toggleCriar(){
+    if(document.querySelector(".quizz-container").innerHTML ==! ''){
+       document.querySelector(".criar-quizz").classList.add("not-display")
+       document.querySelector(".seus-quizzes").classList.remove("not-display") 
     }
 }
 //getList()
