@@ -182,6 +182,10 @@ body{
     filter: opacity(0.5);
 }
 
+.hidden{
+    display: none;
+}
+
 .main-header-container-bottom {
     height: 227px;
 
@@ -243,54 +247,62 @@ body{
 
 }
 
-.hidden{
+.quizz-result {
+    background-color: white;
 
-    display: none;
+    width: 759px;
+    height: 676px;
 
+    margin: 0 auto 42px auto;
+
+    padding-top: 28px;
 }
 
-/* Tela 3 */
-.tela3{
+.quizz-results-header {
+    width: 727px;
+    height: 99px;
 
-    width: 100%;
-    height: auto;
-
+    margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
 
+    background-color: red;
 }
-.container3{
 
-    width: 41.7%;
-    height: auto;
-
+.quizz-results-content {
     display: flex;
-    flex-direction: column;
-
+    width: 727px;
+    margin: 18px auto;
 }
-.container3 strong:nth-child(2){
-    text-align: center;
+.quizz-results-content img {
+    width: 364px;
+
+    margin-right: 18px;
 }
-.nvl {
 
-    display: flex;
-    flex-direction: column;
+.reset-button {
+    background-color: red;
+    border: none;
+    display: block;
+    width: 260px;
+    height: 52px;
 
-
+    border-radius: 15px;
+    margin: auto;
+    
 }
-input {
 
-    width: 100%;
-    height: 46px;
-    border: 1px solid #d1d1d1;
-    border-radius: 5px;
+.back-button {
 
-}
-input::placeholder {
+    background-color: white;
+    border: none;
+    
+    display: block;
+    width: 220px;
+    height: 52px;
 
-    font-style: italic;
-    color: #bababa;
-    font-size: 19px;
-
+    border-radius: 10px;
+    margin: 10px auto 0 auto;
+    
 }
