@@ -257,3 +257,10 @@ function selectAnswer(option) {
     }
 }
 
+//Tela 3
+
+function niveis(){
+    tela_3 = document.querySelector(".tela_3");
+    tela_3.innerHTML += ""
+}
+
