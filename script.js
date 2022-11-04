@@ -30,7 +30,7 @@ function quizzList() {
                 <p>Você não criou nenhum quizz ainda :(</p>
                 <button onclick="criarQuizz()">Criar Quizz</button>
             </div>
-            <div class="seus-quizzes not-display">
+            <div class="seus-quizzes hidden">
                 <p>Seus Quizzes <ion-icon onclick="criarQuizz()" name="add-circle"></ion-icon></p>
                 <div class = "quizz-container"></div>
             </div>
@@ -51,11 +51,11 @@ function getList() {
 
 function toggleCriar(){
     if(document.querySelector(".quizz-container").innerHTML ==! ''){
-       document.querySelector(".criar-quizz").classList.add("not-display")
-       document.querySelector(".seus-quizzes").classList.remove("not-display") 
+       document.querySelector(".criar-quizz").classList.add("hidden")
+       document.querySelector(".seus-quizzes").classList.remove("hidden") 
     }
 }
-getList()
+//getList()
 
 
 //Tela 2 
@@ -181,6 +181,29 @@ if ( answer1.classList.contains ("unselected") || answer2.classList.contains ("u
 
 function niveis(){
     tela_3 = document.querySelector(".tela_3");
-    tela_3.innerHTML += ""
+    tela_3.innerHTML += `<div class="container3">
+    <strong>Agora, decida os níveis</strong>
+    <div onclick="" class="nvl expandido">
+        <strong>Nível 1</strong>
+        <input class = "nivel_titulo" placeholder="Título do nível" type="text">
+        <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
+        <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
+        <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
+    </div>
+    <div onclick="" class="nvl contraido">
+        <strong>Nível 2</strong>
+        <input class = "nivel_titulo" placeholder="Título do nível" type="text">
+        <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
+        <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
+        <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
+    </div>
+    <div onclick="" class="nvl contraido">
+        <strong>Nível 3</strong>
+        <input class = "nivel_titulo" placeholder="Título do nível" type="text">
+        <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
+        <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
+        <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
+    </div>
+</div>`
 }
 

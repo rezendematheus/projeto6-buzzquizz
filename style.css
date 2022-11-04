@@ -121,10 +121,15 @@ body{
     margin-top: 13px;
 
     overflow-y: scroll;
+    overflow-x: auto;
+    
+    
+}
+.quizz-container::-webkit-scrollbar{
+    width: 5px;
 }
 .go-quizz{
     position: relative;
-
     width: 340px;
     height: 181px;
 
@@ -145,6 +150,7 @@ body{
 
     bottom:0px;
     left: 17px;
+    overflow-x:auto;
    
 }
 .go-quizz img{
