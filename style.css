@@ -176,6 +176,10 @@ body{
     filter: opacity(0.5);
 }
 
+.hidden{
+    display: none;
+}
+
 .main-header-container-bottom {
     height: 227px;
 
@@ -235,6 +239,62 @@ body{
     height: 175px;
 }
 
-.hidden{
-    display: none;
+.quizz-result {
+    background-color: white;
+
+    width: 759px;
+    height: 676px;
+
+    margin: 0 auto 42px auto;
+
+    padding-top: 28px;
+}
+
+.quizz-results-header {
+    width: 727px;
+    height: 99px;
+
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: red;
+}
+
+.quizz-results-content {
+    display: flex;
+    width: 727px;
+    margin: 18px auto;
+}
+.quizz-results-content img {
+    width: 364px;
+
+    margin-right: 18px;
+}
+
+.reset-button {
+    background-color: red;
+    border: none;
+    display: block;
+    width: 260px;
+    height: 52px;
+
+    border-radius: 15px;
+    margin: auto;
+    
+}
+
+.back-button {
+
+    background-color: white;
+    border: none;
+    
+    display: block;
+    width: 220px;
+    height: 52px;
+
+    border-radius: 10px;
+    margin: 10px auto 0 auto;
+    
 }

@@ -32,12 +32,44 @@
     line-height: 23px;
 }
 
+.quizz-results-header p {
+ font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 23px;
+
+    color: white;
+}
+
+.quizz-results-content p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+
+    color: #484848;
+}
+
+.reset-button {
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+
+    color: white;
+}
+
+.back-button {
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+
+    color: #818181;
+}
 
 .correct {
 
     color: green;
 }
-
 .wrong {
 
     color: red;
