@@ -155,6 +155,7 @@ function selectAnswer(option) {
     }
 
     console.log(score, counter)
+    
     let answer1 = option.parentNode.children[0]
     let answer2 = option.parentNode.children[1]
     let answer3 = option.parentNode.children[2]
@@ -248,8 +249,7 @@ function selectAnswer(option) {
    
     <button onclick="getQuizz(${resetId})"class = "reset-button">Reiniciar Quizz</button>
     <button onclick="getList()" class = "back-button">Voltar para home</button>
-    
-        `
+     `
             }
 
             setTimeout(() => quizzResult.scrollIntoView({ behavior: 'smooth' }), 2000)
