@@ -213,7 +213,7 @@ function selectAnswer(option) {
     if (answer4.classList.contains("true")) {
         answer4.classList.add("correct")
     }
-    if (answer4.classList.contains("false")) {
+    if (answer4 && answer4.classList.contains("false")) {
         answer4.classList.add("wrong")
     }
     setTimeout(() => nextQuestion.scrollIntoView({ behavior: 'smooth' }), 2000)
