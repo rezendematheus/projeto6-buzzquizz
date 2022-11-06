@@ -41,6 +41,7 @@ function atualizarQuizzes() {
 function quizzList() {
 
     let body = document.querySelector("body")
+
     body.innerHTML +=
         `<div class="tela-1">
         <div class="content-1">
@@ -81,6 +82,8 @@ getList()
 
 //INICIO Tela 2 PEDRO
 
+
+//VARIAVEIS GLOBAIS(PODEM SER ACESSADAS POR MAIS DE UMA FUNCAO)
 let questsNumber = 0
 let counter = 0
 let score = 0
@@ -89,7 +92,7 @@ let resetId = 0
 
 
 
-function getQuizz(quizzId) { // FUNCAO 1 RECEBE A AQUISICAO DA API
+function getQuizz(quizzId) { // FUNCAO 1 RECEBE A REQUISICAO DA API
 
     counter = 0
     score = 0
@@ -121,8 +124,15 @@ function showQuizz(quizz) { // FUNCAO 2 RENDERIZA O QUIZZ NA TELA
     header.innerHTML = `<div class="main-header-container-top">
     <h1>BuzzQuizz</h1>
 </div> `
-    header.innerHTML += `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
-rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bottom">
+
+
+    header.innerHTML +=
+        //ESTILO EM LINHA PARA RENDERIZAR IMAGEM DINAMICAMENTE
+        `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
+rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" 
+class="main-header-container-bottom">
+
+
 <h1>${quizz.data.title}</h1>
 </div>`
 
@@ -172,7 +182,7 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
     let nextQuestion = option.parentNode.parentNode.nextElementSibling // SELECIONANDO A DIV PARA SCROLLAR PAGINA PARA PROXIMA PERGUNTA
 
 
-// INICIO LOGICA PARA CLIQUE UNICO POR QUESTAO
+    // INICIO LOGICA PARA CLIQUE UNICO POR QUESTAO
     if (answer1.classList.contains("unselected") || answer2.classList.contains("unselected")) {
         return
     }
@@ -219,13 +229,13 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
     if (answer4 && answer4.classList.contains("false")) {
         answer4.classList.add("wrong")
     }
-// FIM LOGICA PARA CLIQUE UNICO POR QUESTAO
+    // FIM LOGICA PARA CLIQUE UNICO POR QUESTAO
 
     if (nextQuestion) { // LOGICA PARA AVANCAR PARA A PROXIMA QUESTAO
         setTimeout(() => nextQuestion.scrollIntoView({ behavior: 'smooth' }), 2000)
     }
 
-// INICIO LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
+    // INICIO LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
     if (counter == questsNumber) {
 
         let quizzResult = document.createElement("div")
@@ -270,8 +280,7 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
             setTimeout(() => quizzResult.scrollIntoView({ behavior: 'smooth' }), 2000)
         }
     }
-
-// FIM LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
+    // FIM LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
 }
 function fecharQuizz(){
     let header = document.querySelector(".main-header-container-top").nextElementSibling
