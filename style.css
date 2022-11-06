@@ -357,3 +357,116 @@ input::placeholder {
     display: none;
 
 }
+
+/* tela 3 lardy */
+/* Tela 3 */
+
+.tela-3{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo-form{
+    font-size: 23px;
+    line-height: 27px;
+    font-weight: 700;
+    margin-bottom: 27px;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05)
+}
+.comeco{
+    width: 600px;
+    height: 256px;
+    justify-content: center;
+}
+.perguntas{
+    width: 600px;
+}
+.perguntas input:last-child{
+    margin-bottom: 23px;
+}
+h4{
+    margin-left: 20px;
+    margin-top: 23px;
+    margin-bottom: 10px;
+}
+.perguntas .url-incorreta1,
+.perguntas .url-incorreta2,
+.perguntas .url-incorreta3{
+margin-bottom: 23px;
+}
+.nivel{
+    width: 600px;
+    height: 316px;
+    padding-bottom: 23px;
+    margin-bottom: 23px;
+    justify-content: center;
+}
+.header-form{
+    display: flex;
+    margin: 27px 20px 12px 20px;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.header-form ion-icon{
+    font-size: 26px;
+    line-height: 700;
+}
+
+h4,
+h3{
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.formulario input{
+    width: 564px;
+    height: 46px;
+    
+    margin: 5px 18px;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    padding-left: 15px;
+    
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 22px;
+    color: black;
+}
+
+.formulario input::placeholder{
+    font-style: italic;
+    color: #BABABA;
+    font-weight: 400;
+}
+
+.botao-t3{
+    width: 368px;
+    height: 54px;
+    margin-top: 85px;
+    border-radius: 15px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EC362D;
+    color: #ffffff;
+    font-size: 21px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.botao-t3:hover{
+    background-color: #f1453c;
+}
