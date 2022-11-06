@@ -8,14 +8,16 @@ const retornaSucesso = (sucesso) => {
 }
 
 //Tela 1
-
+function getList() {
+    axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
+        .catch(retornaErro)
+        .then(listarQuizz)
+}
 
 function listarQuizz(response) {
-  
     quizzList()
     const list = document.querySelector(".todos-quizzes")
-    console.log(response.data)
-    response.data.forEach(element => {
+    response.data.forEach((element) => {
         list.querySelector(".quizz-container").innerHTML +=
             `<div class="go-quizz" onclick="getQuizz(${element.id})">
             <img src="${element.image}" alt="">
@@ -23,7 +25,19 @@ function listarQuizz(response) {
         </div>`
     });
 }
-
+function atualizarQuizzes() {
+    const demanda = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
+    .then((response)=>{
+        document.querySelector(".todos-quizzes").querySelector(".quizz-container").innerHTML = ""
+        response.data.forEach((element) => {
+            document.querySelector(".todos-quizzes").querySelector(".quizz-container").innerHTML +=
+                `<div class="go-quizz" onclick="getQuizz(${element.id})">
+                <img src="${element.image}" alt="">
+                <p>${element.title}</p>
+            </div>`
+        })
+        })
+}
 function quizzList() {
 
     let body = document.querySelector("body")
@@ -52,26 +66,20 @@ function quizzList() {
 
     header.innerHTML = `<div class="main-header-container-top">
     <h1>BuzzQuizz</h1>
-</div> `
+</div>`
 }
 
-function getList() {
-
-    axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
-        .catch(retornaErro)
-        .then(listarQuizz)
-}
-
-function toggleCriar(){
-    if(document.querySelector(".quizz-container").innerHTML ==! ''){
-       document.querySelector(".criar-quizz").classList.add("not-display")
-       document.querySelector(".seus-quizzes").classList.remove("not-display") 
+function toggleCriar() {
+    if (document.querySelector(".quizz-container").innerHTML !== '') {
+        document.querySelector(".criar-quizz").classList.add("not-display")
+        document.querySelector(".seus-quizzes").classList.remove("not-display")
     }
 }
-//getList()
+
+getList()
 
 
-//Tela 2 
+//INICIO Tela 2 PEDRO
 
 let questsNumber = 0
 let counter = 0
@@ -81,10 +89,11 @@ let resetId = 0
 
 
 
-function getQuizz(quizzId) {
+function getQuizz(quizzId) { // FUNCAO 1 RECEBE A AQUISICAO DA API
 
     counter = 0
     score = 0
+    levels = []
 
     let header = document.querySelector(".main-header")
 
@@ -95,15 +104,14 @@ function getQuizz(quizzId) {
     setTimeout(() => header.scrollIntoView({ behavior: 'smooth' }), 500)
 }
 
-function showQuizz(quizz) {
+function showQuizz(quizz) { // FUNCAO 2 RENDERIZA O QUIZZ NA TELA
 
-    levels = quizz.data.levels
+    levels = quizz.data.levels // atualizando array para funcao3 selectAnswer() renderizar o resultado final do quizz
+
+    questsNumber = quizz.data.questions.length // atualizando numero de perguntas para funcao3 selectAnswer() validar o fim do quizz 
 
     let mainContent = document.querySelector(".main-content")
-    questsNumber = quizz.data.questions.length
-
     let header = document.querySelector(".main-header")
-
     let screenOne = document.querySelector(".tela-1")
 
     screenOne.classList.add("hidden")
@@ -116,12 +124,11 @@ function showQuizz(quizz) {
     header.innerHTML += `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
 rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bottom">
 <h1>${quizz.data.title}</h1>
-</div>
-`
-    console.log(quizz)
+</div>`
+
     for (i = 0; i < quizz.data.questions.length; i++) {
 
-
+        // INICIO EMBARALHAR RESPOSTAS
         function comparador() {
             return Math.random() - 0.5;
         }
@@ -129,6 +136,8 @@ rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bott
         let arrayAnswers = quizz.data.questions[i].answers
 
         arrayAnswers.sort(comparador);
+        // FIM EMBARALHAR RESPOSTAS
+
 
         mainContent.innerHTML += `<div class="quest-container">
 <div class="quest-title">
@@ -148,47 +157,41 @@ rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bott
     }
 }
 
-function selectAnswer(option) {
+function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM DO QUIZZ
+
     counter++
     if (option.classList.contains("true")) {
         score++
     }
 
-    console.log(score, counter)
     let answer1 = option.parentNode.children[0]
     let answer2 = option.parentNode.children[1]
     let answer3 = option.parentNode.children[2]
     let answer4 = option.parentNode.children[3]
 
-    let nextQuestion = option.parentNode.parentNode.nextElementSibling
+    let nextQuestion = option.parentNode.parentNode.nextElementSibling // SELECIONANDO A DIV PARA SCROLLAR PAGINA PARA PROXIMA PERGUNTA
 
 
-
+// INICIO LOGICA PARA CLIQUE UNICO POR QUESTAO
     if (answer1.classList.contains("unselected") || answer2.classList.contains("unselected")) {
         return
     }
-    if (answer3 !== undefined) {
-        if (answer3.classList.contains("unselected")) {
-            return
-        }
+    if (answer3 && answer3.classList.contains("unselected")) {
+        return
+
     }
-    if (answer4 !== undefined) {
-        if (answer4.classList.contains("unselected")) {
-            return
-        }
+    if (answer4 && answer4.classList.contains("unselected")) {
+        return
     }
-    if (answer3 !== undefined) {
+    if (answer3) {
         answer3.classList.add("unselected")
     }
-    if (answer4 !== undefined) {
+    if (answer4) {
         answer4.classList.add("unselected")
     }
 
     answer1.classList.add("unselected")
     answer2.classList.add("unselected")
-
-
-
     option.classList.remove("unselected")
 
 
@@ -204,20 +207,25 @@ function selectAnswer(option) {
     if (answer2.classList.contains("false")) {
         answer2.classList.add("wrong")
     }
-    if (answer3.classList.contains("true")) {
+    if (answer3 && answer3.classList.contains("true")) {
         answer3.classList.add("correct")
     }
-    if (answer3.classList.contains("false")) {
+    if (answer3 && answer3.classList.contains("false")) {
         answer3.classList.add("wrong")
     }
-    if (answer4.classList.contains("true")) {
+    if (answer4 && answer4.classList.contains("true")) {
         answer4.classList.add("correct")
     }
     if (answer4 && answer4.classList.contains("false")) {
         answer4.classList.add("wrong")
     }
-    setTimeout(() => nextQuestion.scrollIntoView({ behavior: 'smooth' }), 2000)
+// FIM LOGICA PARA CLIQUE UNICO POR QUESTAO
 
+    if (nextQuestion) { // LOGICA PARA AVANCAR PARA A PROXIMA QUESTAO
+        setTimeout(() => nextQuestion.scrollIntoView({ behavior: 'smooth' }), 2000)
+    }
+
+// INICIO LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
     if (counter == questsNumber) {
 
         let quizzResult = document.createElement("div")
@@ -228,16 +236,24 @@ function selectAnswer(option) {
 
         let resultado = 0
 
-        console.log(mainContent, quizzResult)
 
-        if (score > 2) {
-            resultado = (score / questsNumber * 100).toFixed(0)
-            score = 2
-        }
 
         for (i = 0; i < levels.length; i++) {
-            if (score == i) {
+
+            if (levels.length < 3 && score >= 2) {
                 resultado = (score / questsNumber * 100).toFixed(0)
+                score = 1
+            }
+
+            if (score > 2) {
+                resultado = (score / questsNumber * 100).toFixed(0)
+                score = 2
+            }
+
+            if (score == i) {
+                if (resultado === 0) {
+                    resultado = (score / questsNumber * 100).toFixed(0)
+                }
                 quizzResult.innerHTML = `<div class="quizz-results-header">
             <p>${resultado}% de acerto: ${levels[i].title}</p>
         </div>
@@ -247,19 +263,31 @@ function selectAnswer(option) {
         </div>
    
     <button onclick="getQuizz(${resetId})"class = "reset-button">Reiniciar Quizz</button>
-    <button onclick="getList()" class = "back-button">Voltar para home</button>
-    
-        `
+    <button onclick="fecharQuizz()" class = "back-button">Voltar para home</button>
+     `
             }
 
             setTimeout(() => quizzResult.scrollIntoView({ behavior: 'smooth' }), 2000)
         }
     }
+
+// FIM LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
 }
+function fecharQuizz(){
+    let header = document.querySelector(".main-header-container-top").nextElementSibling
+    let content = document.querySelector(".main-content")
+    header.remove()
+    atualizarQuizzes()
+    content.innerHTML =""
+    content.classList.toggle("hidden")
+    document.querySelector(".tela-1").classList.toggle("hidden")
+}
+// FINAL TELA 2 PEDRO
+
 
 //Tela 3
 
-function exibirCriarQuizzEtapa1(){
+function exibirCriarQuizzEtapa1() {
     let main = document.querySelector('.main-content');
     main.innerHTML = `
     <div class="tela-3">
@@ -275,7 +303,7 @@ function exibirCriarQuizzEtapa1(){
     console.log(document.querySelector('body'));
 }
 
-function exibirCriarPerguntasQuizz(){
+function exibirCriarPerguntasQuizz() {
     let main = document.querySelector(".main-content");
     main.innerHTML = `
     <div class="tela-3">
@@ -306,7 +334,7 @@ function exibirCriarPerguntasQuizz(){
     </div>`;
 }
 
-function exibirCriarNiveisQuizz(){
+function exibirCriarNiveisQuizz() {
     let main = document.querySelector(".main-content");
     main.innerHTML = `
     <div class="tela-3">
@@ -356,20 +384,20 @@ function finalizarQuizz(){
     main.innerHTML = 'quizz criado com sucesso';
 }
 
-function ocultarConteudo (element){
+function ocultarConteudo(element) {
     element.parentNode.classList.add("toggleable")
     let jaTem = document.querySelector(".n-oculto")
-    if(jaTem !== null){
+    if (jaTem !== null) {
         jaTem.classList.add("oculto")
         jaTem.classList.remove("n-oculto")
     }
     element.parentNode.classList.remove("oculto")
     element.parentNode.classList.add("n-oculto")
 }
-function enviarQuizz (){
+function enviarQuizz() {
     const comeco = document.querySelector(".comeco");
     const perguntas = document.querySelector(".perguntas");
-    const niveis = document.querySelector(".nivel");
+    const niveis = document.querySelectorAll(".campos");
     let quizz = {
                     title: "",
                     image: "",
@@ -390,7 +418,7 @@ function enviarQuizz (){
             let answer = {
                 text: "",
                 image: "",
-                isCorrectAnswer: Boolean
+                isCorrectAnswer: ""
             }
             answer.text = element.querySelector(".resposta") //texto da resposta
             answer.image = element.querySelector(".url").value //imagem da resposta
@@ -398,7 +426,7 @@ function enviarQuizz (){
                 answer.isCorrectAnswer = true
             }
             else{
-                answer.isCorrectAnswer = false
+                answer.isCorrectAnswer = false 
             }
             perguntas.answers += answer //coloca a resposta na lista de respostas
         })
@@ -409,12 +437,12 @@ function enviarQuizz (){
             title: "",
             image: "",
             text: "",
-            minValue: Number
+            minValue: ""
             }
         level.title = element.querySelector(".nivel_titulo")    //atribui valor no objeto level 
         level.image = element.querySelector(".nivel_img") //atribui valor no objeto level
         level.text = element.querySelector (".nivel_desc") //atribui valor no objeto level
-        level.minValue = element.querySelector(".nivel_acerto") //atribui valor no objeto level
+        level.minValue = Number(element.querySelector(".nivel_acerto")) //atribui valor no objeto level
         quizz.levels += level // adiciona o level nos levels do quizz
     })
     axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)

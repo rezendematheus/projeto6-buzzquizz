@@ -174,7 +174,7 @@ body{
     }
 }
 
-/* Tela 2 */
+/* INICIO Tela 2 PEDRO */
 
 
 .unselected {
@@ -270,10 +270,19 @@ body{
     background-color: red;
 }
 
+.quizz-results-header p {
+    padding-left: 15px;
+    overflow: hidden;
+}
 .quizz-results-content {
     display: flex;
     width: 727px;
     margin: 18px auto;
+}
+
+.quizz-results-content p {
+    
+    overflow: hidden;
 }
 .quizz-results-content img {
     width: 364px;
@@ -306,7 +315,7 @@ body{
     margin: 10px auto 0 auto;
     
 }
-
+/* FINAL TELA 2 PEDRO */
 /* tela 3 lardy */
 /* Tela 3 */
 
