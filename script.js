@@ -149,7 +149,7 @@ rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bott
     }
 }
 
-function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA
+function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM DO QUIZZ
 
     counter++
     if (option.classList.contains("true")) {
