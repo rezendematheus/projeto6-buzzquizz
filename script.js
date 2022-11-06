@@ -1,10 +1,10 @@
 
 //Funções úteis
 const retornaErro = (erro) => {
-    console.log(erro)
+    console.log(erro.status)
 }
 const retornaSucesso = (sucesso) => {
-    console.log(sucesso)
+    console.log(sucesso.status)
 }
 
 //Tela 1
@@ -289,17 +289,17 @@ function exibirCriarPerguntasQuizz(){
                 <input class = "texto-pergunta" placeholder="Título do nível" type="text">
                 <input class = "cor-pergunta" placeholder="% de acerto minimo" type="text">
                 <h4>Resposta Correta</h4>
-                <input class = "resposta-correta" placeholder="Resposta correta" type="text">
-                <input class = "url-correta" placeholder="Descrição do nível" type="text">
+                <input class = "resposta correta" placeholder="Resposta correta" type="text">
+                <input class = "url" placeholder="Descrição do nível" type="text">
                 <h4>Respostas incorretas</h4>
-                <input class = "resposta-incorreta1" placeholder="Resposta incorreta 1" type="text">
-                <input class = "url-incorreta1" placeholder="URL da imagem 1" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 1" type="text">
+                <input class = "url" placeholder="URL da imagem 1" type="text">
 
-                <input class = "resposta-incorreta2" placeholder="Resposta incorreta 2" type="text">
-                <input class = "url-incorreta2" placeholder="URL da imagem 2" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 2" type="text">
+                <input class = "url" placeholder="URL da imagem 2" type="text">
 
-                <input class = "resposta-incorreta3" placeholder="Resposta incorreta 3" type="text">
-                <input class = "url-incorreta3" placeholder="URL da imagem 3" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 3" type="text">
+                <input class = "url" placeholder="URL da imagem 3" type="text">
             </div>
         </div> 
         <div onclick="exibirCriarNiveisQuizz()" class="botao-t3">Prosseguir para criar níveis</div>
@@ -335,8 +335,8 @@ function exibirCriarNiveisQuizz(){
                 <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
             </div>
         </div>
-        <div onclick="ocultarConteudo()" class="formulario nivel">
-            <div class="header-form">
+        <div class="formulario nivel">
+            <div onclick="ocultarConteudo()" class="header-form">
                 <h3>Nível 3</h3>
                 <ion-icon name="create-outline"></ion-icon>
             </div>
@@ -351,6 +351,7 @@ function exibirCriarNiveisQuizz(){
     </div>`
 }
 function finalizarQuizz(){
+    enviarQuizz()
     let main = document.querySelector(".main-content");
     main.innerHTML = 'quizz criado com sucesso';
 }
@@ -368,28 +369,56 @@ function ocultarConteudo (element){
 function enviarQuizz (){
     const comeco = document.querySelector(".comeco");
     const perguntas = document.querySelector(".perguntas");
-    const niveis = document.querySelector(".nivel")
+    const niveis = document.querySelector(".nivel");
     let quizz = {
                     title: "",
                     image: "",
                     questions: [],
                     levels: []
+                }
+    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
+    quizz.image = comeco.querySelector(".input-url").value //quizz img
+    perguntas.forEach((element) => {
+        let question = {
+            title: "",
+            color: "",
+            answers: []
         }
-    let question = {
-                        title: "",
-                        color: "",
-                        answers: []
-    }
-    let answer = {
-                    text: "",
-                    image: "",
-                    isCorrectAnswer: Boolean
-    }
-    let level = {
-                    title: "",
-                    image: "",
-                    text: "",
-                    minValue: Number
-    }
+        question.title = element.querySelector(".texto-pergunta").value //coloca o title da questão
+        question.color = element.querySelector(".cor-pergunta").value   // coloca a cor da questão
+        element.document.querySelector(".resposta").forEach((element) => { // função para adicionar as respostas da questão na questão
+            let answer = {
+                text: "",
+                image: "",
+                isCorrectAnswer: Boolean
+            }
+            answer.text = element.querySelector(".resposta") //texto da resposta
+            answer.image = element.querySelector(".url").value //imagem da resposta
+            if(element.classList.contains("correta")){ //se é a correta isCorrectAnswer = true e false caso contrario
+                answer.isCorrectAnswer = true
+            }
+            else{
+                answer.isCorrectAnswer = false
+            }
+            perguntas.answers += answer //coloca a resposta na lista de respostas
+        })
+        quizz.questions += question //coloca a questão na lista de questões
+    })
+    niveis.forEach((element) => { //adicionar os niveis
+        let level = {
+            title: "",
+            image: "",
+            text: "",
+            minValue: Number
+            }
+        level.title = element.querySelector(".nivel_titulo")    //atribui valor no objeto level 
+        level.image = element.querySelector(".nivel_img") //atribui valor no objeto level
+        level.text = element.querySelector (".nivel_desc") //atribui valor no objeto level
+        level.minValue = element.querySelector(".nivel_acerto") //atribui valor no objeto level
+        quizz.levels += level // adiciona o level nos levels do quizz
+    })
+    axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
+    .then(retornaSucesso)
+    .catch(retornaErro)
 }
 

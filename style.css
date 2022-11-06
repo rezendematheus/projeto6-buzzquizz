@@ -247,7 +247,7 @@ body{
 
 }
 
-.quizz-result {
+.quizz-ult {
     background-color: white;
 
     width: 759px;
@@ -349,9 +349,9 @@ h4{
     margin-top: 23px;
     margin-bottom: 10px;
 }
-.perguntas .url-incorreta1,
-.perguntas .url-incorreta2,
-.perguntas .url-incorreta3{
+.perguntas .url,
+.perguntas .url,
+.perguntas .url{
 margin-bottom: 23px;
 }
 .nivel{
