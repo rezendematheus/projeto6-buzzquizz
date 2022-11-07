@@ -331,11 +331,15 @@ function validarValoresInputEtapa1(){
     valoresInputEtapa1.quantidadePerguntas = document.querySelector('.input-qtd-perguntas').value;
     valoresInputEtapa1.quantidadeNiveis = document.querySelector('.input-qtd-niveis').value;
 
-    (valoresInputEtapa1.titulo.length >= 20) ? '' : alert('Digite um título com no mínimo 20 caracteres');
+    // (valoresInputEtapa1.titulo.length >= 20) ? '' : alert('Digite um título com no mínimo 20 caracteres');
+    if(valoresInputEtapa1.titulo.length < 20){
+        alert('Digite um título com no mínimo 20 caracteres');
+    }    
     (valoresInputEtapa1.quantidadePerguntas >= 3) ? '' : alert('Digite uma quantidade de perguntas válida (>3)');
     (valoresInputEtapa1.quantidadeNiveis >= 2) ? '' : alert('Digite uma quantidade de níveis válida (>2)');
     if((valoresInputEtapa1.quantidadeNiveis >= 2) && (valoresInputEtapa1.quantidadePerguntas >= 3) && (valoresInputEtapa1.titulo.length >= 20)){
         exibirCriarPerguntasQuizz();
+        console.log(valoresInputEtapa1);
     }
 }
 
@@ -386,7 +390,6 @@ function exibirCriarPerguntasQuizz() {
 function validarInputsPerguntas(){
     if((document.querySelector('.texto-pergunta').value) &&
     (document.querySelector('.texto-pergunta').value.length >= 20) &&
-    (document.querySelector('.cor-pergunta').value[0] === '#') &&
     (document.querySelector('.resposta-correta') != '') &&
     (document.querySelector('.url-correta') != '') &&
     (document.querySelector('.resposta-incorreta1') != '') &&
@@ -413,13 +416,30 @@ function exibirCriarNiveisQuizz() {
             </div>
             <div id="nivel${i}" class="campos nivel">
                 <input class = "nivel_titulo" placeholder="Título do nível" type="text">
-                <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
-                <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
+                <input class = "nivel_acerto" placeholder="% de acerto minimo" type="number">
+                <input class = "nivel_img" placeholder="URL da imagem do nível" type="url">
                 <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
             </div>
         </div>`;
     }
     main.innerHTML += `<div onclick="finalizarQuizz()" class="botao-t3">Finalizar Quizz</div>`;
+}
+
+function validarInputsNiveis(){
+    let nivelTitulo;
+    let nivelAcerto;
+    let nivelImagem;
+    let nivelDescricao;
+    for(i = 1; i <= quantidadeNiveis; i++){
+        nivelTitulo = document.getElementById(`nivel${i}`).firstChild;
+        nivelAcerto = nivelTitulo.nextSibling;
+        nivelImagem = nivelAcerto.nextSibling;
+        nivelDescricao = nivelImagem.nextSibling;
+        if (nivelTitulo.value == '' || nivelTitulo.value.length < 10 || nivelAcerto.value == ''|| nivelAcerto.value < 0 || nivelAcerto.value > 100 || nivelImagem.value == '' || nivelDescricao.value == '' || nivelDescricao.value.length < 30){
+            alert('preencha os campos corretamente');
+        }
+    }
+
 }
 
 function finalizarQuizz() {
@@ -453,8 +473,8 @@ function enviarQuizz() {
                     questions: [],
                     levels: []
                 }
-    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
-    quizz.image = comeco.querySelector(".input-url").value //quizz img
+    quizz.title = valoresInputEtapa1.titulo //quizz titulo
+    quizz.image = valoresInputEtapa1.url //quizz img
     perguntas.forEach((element) => {
         let question = {
             title: "",
