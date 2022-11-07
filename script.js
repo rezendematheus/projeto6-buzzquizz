@@ -1,5 +1,26 @@
 let id;
-
+let quizz = {
+    title: "",
+    image: "",
+    questions: [],
+    levels: []
+}
+let question = {
+    title: "",
+    color: "",
+    answers: []
+}
+let answer = {
+    text: "",
+    image: "",
+    isCorrectAnswer: ""
+}
+let level = {
+    title: "",
+    image: "",
+    text: "",
+    minValue: ""
+    }
 //Funções úteis
 const retornaErro = (erro) => {
     console.log(erro.status)
@@ -311,106 +332,151 @@ function fecharQuizz(){
 
 //Tela 3
 function criarQuizz(){
-    document.querySelector(".tela-1").classList.toggle("hidden")
-    document.querySelector(".main-content").classList.toggle("hidden")
-    exibirCriarQuizzEtapa1()
+    let main = document.querySelector('.main-content');
+    main.classList.remove('hidden');
+    exibirCriarQuizzEtapa1();
 }
 
 function exibirCriarQuizzEtapa1() {
+    console.log('exibirCriarQuizzEtapa1');
+    let tela1 = document.querySelector('.tela-1');
+    tela1.classList.add('hidden');
     let main = document.querySelector('.main-content');
     main.innerHTML = `
-    <div class="tela-3">
+    <div id="comeco-quizz" class="tela-3">
         <h2 class="titulo-form">Comece pelo começo</h2>
         <div class="formulario comeco">
-            <input class ="input-titulo" placeholder="Título do seu quizz" type="text">
-            <input class ="input-url" placeholder="URL da imagem do seu quizz" type="text">
-            <input class ="input-qtd-perguntas" placeholder="Quantidade de perguntas do quizz" type="text">
-            <input class ="input-qtd-niveis" placeholder="Quantidade de níveis do quizz" type="text">
+            <input class ="input-titulo" placeholder="Título do seu quizz" type="text" maxlength="65">
+            <input class ="input-url" placeholder="URL da imagem do seu quizz" type="url">
+            <input class ="input-qtd-perguntas" placeholder="Quantidade de perguntas do quizz" type="number">
+            <input class ="input-qtd-niveis" placeholder="Quantidade de níveis do quizz" type="number">
         </div>
-        <div onclick="exibirCriarPerguntasQuizz()" class="botao-t3">Prosseguir para criar perguntas</div>
+        <div onclick="validarValoresInputEtapa1()" class="botao-t3">Prosseguir para criar perguntas</div>
     </div>`;
-    console.log(document.querySelector('body'));
+}
+
+let valoresInputEtapa1 = {
+    titulo: '',
+    url: '',
+    quantidadePerguntas: '',
+    quantidadeNiveis: ''
+}
+
+function validarValoresInputEtapa1(){
+    valoresInputEtapa1.titulo = document.querySelector('.input-titulo').value;
+    valoresInputEtapa1.url = document.querySelector('.input-url').value;
+    valoresInputEtapa1.quantidadePerguntas = document.querySelector('.input-qtd-perguntas').value;
+    valoresInputEtapa1.quantidadeNiveis = document.querySelector('.input-qtd-niveis').value;
+
+    (valoresInputEtapa1.titulo.length >= 20) ? '' : alert('Digite um título com no mínimo 20 caracteres');
+    (valoresInputEtapa1.quantidadePerguntas >= 3) ? '' : alert('Digite uma quantidade de perguntas válida (>3)');
+    (valoresInputEtapa1.quantidadeNiveis >= 2) ? '' : alert('Digite uma quantidade de níveis válida (>2)');
+    if((valoresInputEtapa1.quantidadeNiveis >= 2) && (valoresInputEtapa1.quantidadePerguntas >= 3) && (valoresInputEtapa1.titulo.length >= 20)){
+        registrarComeco();
+        exibirCriarPerguntasQuizz();
+    }
 }
 
 function exibirCriarPerguntasQuizz() {
+    let comecoQuizz = document.getElementById('comeco-quizz');
+    comecoQuizz.classList.add('hidden');
     let main = document.querySelector(".main-content");
-    main.innerHTML = `
-    <div class="tela-3">
+    main.innerHTML += `
+    <div id="perguntas" class="tela-3">
         <h2 class="titulo-form">Crie suas perguntas</h2>
-        <div onclick="" class="formulario perguntas oculto">
-            <div onclick="ocultarConteudo(this)" class="header-form ">
-                <h3>Pergunta 1</h3>
+    </div>
+    `;
+    let listaPerguntas = document.getElementById('perguntas');
+    for(i = 1; i <= valoresInputEtapa1.quantidadePerguntas; i++){
+        let primeiraPerguntaAberta;
+        (i === 1) ? primeiraPerguntaAberta = '' : primeiraPerguntaAberta = 'hidden';
+        listaPerguntas.innerHTML += `
+        <div onclick="" class="formulario perguntas">
+            <div onclick="ocultarConteudo2(this)" class="header-form ">
+                <h3>Pergunta ${i}</h3>
                 <ion-icon name="create-outline"></ion-icon>
             </div>
-            <div class="campos">
-                <input class = "texto-pergunta" placeholder="Título do nível" type="text">
-                <input class = "cor-pergunta" placeholder="% de acerto minimo" type="text">
+            <div class="campos ${primeiraPerguntaAberta} pergunta${i}">
+                <input class = "texto-pergunta" placeholder="Título da pergunta" type="text">
+                <input class = "cor-pergunta" placeholder="Cor de fundo da pergunta" type="hexadecimalx ">
                 <h4>Resposta Correta</h4>
                 <input class = "resposta correta" placeholder="Resposta correta" type="text">
-                <input class = "url" placeholder="Descrição do nível" type="text">
+                <input class = "url-correta" placeholder="URL da resposta correta" type="url">
+                <!-- <input class = "resposta correta" placeholder="Resposta correta" type="text">
+                <input class = "url" placeholder="Descrição do nível" type="text"> -->
                 <h4>Respostas incorretas</h4>
-                <input class = "resposta" placeholder="Resposta incorreta 1" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 1" type="text">
                 <input class = "url" placeholder="URL da imagem 1" type="text">
 
-                <input class = "resposta" placeholder="Resposta incorreta 2" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 2" type="text">
                 <input class = "url" placeholder="URL da imagem 2" type="text">
 
-                <input class = "resposta" placeholder="Resposta incorreta 3" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 3" type="text">
                 <input class = "url" placeholder="URL da imagem 3" type="text">
             </div>
-        </div> 
-        <div onclick="exibirCriarNiveisQuizz()" class="botao-t3">Prosseguir para criar níveis</div>
-    </div>`;
+        </div>
+        <div class="espaco-perguntas"></div>
+        `;
+    }
+    listaPerguntas.innerHTML += `<div onclick="validarInputsPerguntas()" class="botao-t3">Prosseguir para criar níveis</div>`;
+}
+
+function validarInputsPerguntas(){
+    let i = 0;
+    document.querySelectorAll("perguntas").forEach((element) => {
+        if((element.querySelector('.texto-pergunta').value) && (element.querySelector('.texto-pergunta').value.length >= 20)) {
+            alert('Preencha os dados corretamente')
+        }
+        element.querySelector('.texto-pergunta').querySelectorAll("campos").forEach((element => {
+            if(((element.querySelector('.correta').value != '') &&
+            (element.querySelector('.url').value != '') &&
+            (element.querySelector('.resposta').value != '') &&
+            (element.querySelector('.url').value != '') || i < 2)){
+                alert('Preencha os dados corretamente')
+            }
+            i++;
+        }))
+    })
+    
+    // if((document.querySelector('.texto-pergunta').value) &&
+        registrarPerguntas();
+    //     exibirCriarNiveisQuizz();
+    // }else alert('Preencha os dados corretamente');
+
 }
 
 function exibirCriarNiveisQuizz() {
+    let perguntasQuizz = document.getElementById('perguntas');
+    perguntasQuizz.classList.add('hidden');
     let main = document.querySelector(".main-content");
-    main.innerHTML = `
-    <div class="tela-3">
+    main.innerHTML += `
+    <div id="niveis-quizz" class="tela-3">
         <h2 class="titulo-form">Agora, decida os níveis</h2>
+    </div>`;
+    for(i = 1; i <= quantidadeNiveis; i++){
+        main.innerHTML += `
         <div onclick="" class="formulario nivel">
             <div class="header-form">
-                <h3>Nível 1</h3>
+                <h3>Nível ${i}</h3>
                 <ion-icon name="create-outline"></ion-icon>
             </div>
-            <div class="campos">
+            <div id="nivel${i}" class="campos nivel">
                 <input class = "nivel_titulo" placeholder="Título do nível" type="text">
                 <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
                 <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
                 <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
             </div>
-        </div>
-        <div onclick="" class="formulario nivel">
-            <div class="header-form">
-                <h3>Nível 2</h3>
-                <ion-icon name="create-outline"></ion-icon>
-            </div>
-            <div class="campos">
-                <input class = "nivel_titulo" placeholder="Título do nível" type="text">
-                <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
-                <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
-                <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
-            </div>
-        </div>
-        <div class="formulario nivel">
-            <div onclick="ocultarConteudo()" class="header-form">
-                <h3>Nível 3</h3>
-                <ion-icon name="create-outline"></ion-icon>
-            </div>
-            <div class="campos">
-                <input class = "nivel_titulo" placeholder="Título do nível" type="text">
-                <input class = "nivel_acerto" placeholder="% de acerto minimo" type="text">
-                <input class = "nivel_img" placeholder="URL da imagem do nível" type="text">
-                <input class = "nivel_desc" placeholder="Descrição do nível" type="text">
-            </div>
-        </div>
-        <div onclick="finalizarQuizz()" class="botao-t3">Finalizar Quizz</div>
-    </div>`
+        </div>`;
+    }
+    main.innerHTML += `<div onclick="finalizarQuizz()" class="botao-t3">Finalizar Quizz</div>`;
 }
-function finalizarQuizz(){
-    enviarQuizz()
+
+function finalizarQuizz() {
+    registrarNiveis()
+    let niveisQuizz = document.getElementById("niveis-quizz");
+    niveisQuizz.classList.add('hidden');
     let main = document.querySelector(".main-content");
-    main.innerHTML = 'quizz criado com sucesso';
+    main.innerHTML += 'quizz criado com sucesso';
 }
 
 function ocultarConteudo(element) {
@@ -423,32 +489,16 @@ function ocultarConteudo(element) {
     element.parentNode.classList.remove("oculto")
     element.parentNode.classList.add("n-oculto")
 }
-function enviarQuizz() {
-    const comeco = document.querySelector(".comeco");
-    const perguntas = document.querySelector(".perguntas");
-    const niveis = document.querySelectorAll(".campos");
-    let quizz = {
-                    title: "",
-                    image: "",
-                    questions: [],
-                    levels: []
-                }
-    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
-    quizz.image = comeco.querySelector(".input-url").value //quizz img
+function ocultarConteudo2(element){
+    element.parentNode.querySelector('.campos').classList.toggle('hidden');
+    console.log('aaa');
+}
+function registrarPerguntas (){
+    const perguntas = document.querySelectorAll(".perguntas");
     perguntas.forEach((element) => {
-        let question = {
-            title: "",
-            color: "",
-            answers: []
-        }
         question.title = element.querySelector(".texto-pergunta").value //coloca o title da questão
         question.color = element.querySelector(".cor-pergunta").value   // coloca a cor da questão
         element.document.querySelector(".resposta").forEach((element) => { // função para adicionar as respostas da questão na questão
-            let answer = {
-                text: "",
-                image: "",
-                isCorrectAnswer: ""
-            }
             answer.text = element.querySelector(".resposta") //texto da resposta
             answer.image = element.querySelector(".url").value //imagem da resposta
             if(element.classList.contains("correta")){ //se é a correta isCorrectAnswer = true e false caso contrario
@@ -458,31 +508,47 @@ function enviarQuizz() {
                 answer.isCorrectAnswer = false 
             }
             perguntas.answers += answer //coloca a resposta na lista de respostas
+            let answer = {
+                text: "",
+                image: "",
+                isCorrectAnswer: ""
+            }
         })
         quizz.questions += question //coloca a questão na lista de questões
     })
+}
+function registrarNiveis (){
+    const niveis = document.querySelectorAll(".campos");
     niveis.forEach((element) => { //adicionar os niveis
-        let level = {
-            title: "",
-            image: "",
-            text: "",
-            minValue: ""
-            }
+        
         level.title = element.querySelector(".nivel_titulo")    //atribui valor no objeto level 
         level.image = element.querySelector(".nivel_img") //atribui valor no objeto level
         level.text = element.querySelector (".nivel_desc") //atribui valor no objeto level
         level.minValue = Number(element.querySelector(".nivel_acerto")) //atribui valor no objeto level
         quizz.levels += level // adiciona o level nos levels do quizz
     })
+}
+function registrarComeco(){
+    const comeco = document.querySelector(".comeco");
+    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
+    quizz.image = comeco.querySelector(".input-url").value //quizz img
+}
+function enviarQuizz() {
     axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
     .then((response) => {
         id = response.data.id
         let lista = JSON.parse(localStorage.getItem("ids"))
         if(lista !== null && lista !== undefined){
             lista += id
+            
         }
         else{
             localStorage.getItem("ids", JSON.stringify([id]))
+        }
+        let question = {
+            title: "",
+            color: "",
+            answers: []
         }
    })
     .catch(retornaErro)
