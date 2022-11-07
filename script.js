@@ -1,3 +1,4 @@
+let id;
 
 //Funções úteis
 const retornaErro = (erro) => {
@@ -24,6 +25,20 @@ function listarQuizz(response) {
             <p>${element.title}</p>
         </div>`
     });
+    let quizzid = localStorage.getItem("ids")
+    if(quizzid !== null){
+        const list = JSON.parse(quizzid)
+        list.forEach((element) => {
+            axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${element}`)
+            .then((element) => {
+                document.querySelector(".quizz-container").innerHTML +=
+                    `<div class="go-quizz" onclick="getQuizz(${element.id})">
+                        <img src="${element.image}" alt="">
+                        <p>${element.title}</p>
+                    </div>`
+            })
+        })
+    }
 }
 function atualizarQuizzes() {
     const demanda = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
@@ -460,7 +475,16 @@ function enviarQuizz() {
         quizz.levels += level // adiciona o level nos levels do quizz
     })
     axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
-    .then((response) => {response.data.id})
+    .then((response) => {
+        id = response.data.id
+        let lista = JSON.parse(localStorage.getItem("ids"))
+        if(lista !== null && lista !== undefined){
+            lista += id
+        }
+        else{
+            localStorage.getItem("ids", JSON.stringify([id]))
+        }
+   })
     .catch(retornaErro)
 }
 
