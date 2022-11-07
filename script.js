@@ -1,20 +1,22 @@
 //Funções úteis
 const retornaErro = (erro) => {
-    console.log(erro)
+    console.log(erro.status)
 }
 const retornaSucesso = (sucesso) => {
-    console.log(sucesso)
+    console.log(sucesso.status)
 }
 
 //Tela 1
-
+function getList() {
+    axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
+        .catch(retornaErro)
+        .then(listarQuizz)
+}
 
 function listarQuizz(response) {
-
     quizzList()
     const list = document.querySelector(".todos-quizzes")
-    console.log(response.data)
-    response.data.forEach(element => {
+    response.data.forEach((element) => {
         list.querySelector(".quizz-container").innerHTML +=
             `<div class="go-quizz" onclick="getQuizz(${element.id})">
             <img src="${element.image}" alt="">
@@ -22,10 +24,23 @@ function listarQuizz(response) {
         </div>`
     });
 }
-
+function atualizarQuizzes() {
+    const demanda = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
+    .then((response)=>{
+        document.querySelector(".todos-quizzes").querySelector(".quizz-container").innerHTML = ""
+        response.data.forEach((element) => {
+            document.querySelector(".todos-quizzes").querySelector(".quizz-container").innerHTML +=
+                `<div class="go-quizz" onclick="getQuizz(${element.id})">
+                <img src="${element.image}" alt="">
+                <p>${element.title}</p>
+            </div>`
+        })
+        })
+}
 function quizzList() {
 
     let body = document.querySelector("body")
+
     body.innerHTML +=
         `<div class="tela-1">
         <div class="content-1">
@@ -51,27 +66,23 @@ function quizzList() {
 
     header.innerHTML = `<div class="main-header-container-top">
     <h1>BuzzQuizz</h1>
-</div> `
-}
-
-function getList() {
-
-    axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
-        .catch(retornaErro)
-        .then(listarQuizz)
+</div>`
 }
 
 function toggleCriar() {
-    if (document.querySelector(".quizz-container").innerHTML == ! '') {
+    if (document.querySelector(".quizz-container").innerHTML !== '') {
         document.querySelector(".criar-quizz").classList.add("not-display")
         document.querySelector(".seus-quizzes").classList.remove("not-display")
     }
 }
+
 getList()
 
 
 //INICIO Tela 2 PEDRO
 
+
+//VARIAVEIS GLOBAIS(PODEM SER ACESSADAS POR MAIS DE UMA FUNCAO)
 let questsNumber = 0
 let counter = 0
 let score = 0
@@ -80,7 +91,7 @@ let resetId = 0
 
 
 
-function getQuizz(quizzId) { // FUNCAO 1 RECEBE A AQUISICAO DA API
+function getQuizz(quizzId) { // FUNCAO 1 RECEBE A REQUISICAO DA API
 
     counter = 0
     score = 0
@@ -112,8 +123,15 @@ function showQuizz(quizz) { // FUNCAO 2 RENDERIZA O QUIZZ NA TELA
     header.innerHTML = `<div class="main-header-container-top">
     <h1>BuzzQuizz</h1>
 </div> `
-    header.innerHTML += `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
-rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" class="main-header-container-bottom">
+
+
+    header.innerHTML +=
+        //ESTILO EM LINHA PARA RENDERIZAR IMAGEM DINAMICAMENTE
+        `<div style = "background-image: linear-gradient(rgba(0, 0, 0, 0.6),
+rgba(0, 0, 0, 0.6)), url(${quizz.data.image})" 
+class="main-header-container-bottom">
+
+
 <h1>${quizz.data.title}</h1>
 </div>`
 
@@ -163,7 +181,7 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
     let nextQuestion = option.parentNode.parentNode.nextElementSibling // SELECIONANDO A DIV PARA SCROLLAR PAGINA PARA PROXIMA PERGUNTA
 
 
-// INICIO LOGICA PARA CLIQUE UNICO POR QUESTAO
+    // INICIO LOGICA PARA CLIQUE UNICO POR QUESTAO
     if (answer1.classList.contains("unselected") || answer2.classList.contains("unselected")) {
         return
     }
@@ -210,13 +228,13 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
     if (answer4 && answer4.classList.contains("false")) {
         answer4.classList.add("wrong")
     }
-// FIM LOGICA PARA CLIQUE UNICO POR QUESTAO
+    // FIM LOGICA PARA CLIQUE UNICO POR QUESTAO
 
     if (nextQuestion) { // LOGICA PARA AVANCAR PARA A PROXIMA QUESTAO
         setTimeout(() => nextQuestion.scrollIntoView({ behavior: 'smooth' }), 2000)
     }
 
-// INICIO LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
+    // INICIO LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
     if (counter == questsNumber) {
 
         let quizzResult = document.createElement("div")
@@ -254,16 +272,24 @@ function selectAnswer(option) { // FUNCAO 3 SELECIONA A RESPOSTA E VALIDA O FIM 
         </div>
    
     <button onclick="getQuizz(${resetId})"class = "reset-button">Reiniciar Quizz</button>
-    <button onclick="getList()" class = "back-button">Voltar para home</button>
+    <button onclick="fecharQuizz()" class = "back-button">Voltar para home</button>
      `
             }
 
             setTimeout(() => quizzResult.scrollIntoView({ behavior: 'smooth' }), 2000)
         }
     }
-// FIM LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
+    // FIM LOGICA PARA MOSTRAR RESULTADO FINAL DO QUIZZ
 }
-
+function fecharQuizz(){
+    let header = document.querySelector(".main-header-container-top").nextElementSibling
+    let content = document.querySelector(".main-content")
+    header.remove()
+    atualizarQuizzes()
+    content.innerHTML =""
+    content.classList.toggle("hidden")
+    document.querySelector(".tela-1").classList.toggle("hidden")
+}
 // FINAL TELA 2 PEDRO
 
 
@@ -338,15 +364,17 @@ function exibirCriarPerguntasQuizz() {
                 <h4>Resposta Correta</h4>
                 <input class = "resposta-correta" placeholder="Resposta correta" type="text">
                 <input class = "url-correta" placeholder="URL da resposta correta" type="url">
+                <!-- <input class = "resposta correta" placeholder="Resposta correta" type="text">
+                <input class = "url" placeholder="Descrição do nível" type="text"> -->
                 <h4>Respostas incorretas</h4>
-                <input class = "resposta-incorreta1" placeholder="Resposta incorreta 1" type="text">
-                <input class = "url-incorreta1" placeholder="URL da imagem 1" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 1" type="text">
+                <input class = "url" placeholder="URL da imagem 1" type="text">
 
-                <input class = "resposta-incorreta2" placeholder="Resposta incorreta 2" type="text">
-                <input class = "url-incorreta2" placeholder="URL da imagem 2" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 2" type="text">
+                <input class = "url" placeholder="URL da imagem 2" type="text">
 
-                <input class = "resposta-incorreta3" placeholder="Resposta incorreta 3" type="text">
-                <input class = "url-incorreta3" placeholder="URL da imagem 3" type="text">
+                <input class = "resposta" placeholder="Resposta incorreta 3" type="text">
+                <input class = "url" placeholder="URL da imagem 3" type="text">
             </div>
         </div>
         <div class="espaco-perguntas"></div>
@@ -418,28 +446,56 @@ function ocultarConteudo2(element){
 function enviarQuizz() {
     const comeco = document.querySelector(".comeco");
     const perguntas = document.querySelector(".perguntas");
-    const niveis = document.querySelector(".nivel")
+    const niveis = document.querySelectorAll(".campos");
     let quizz = {
-        title: "",
-        image: "",
-        questions: [],
-        levels: []
-    }
-    let question = {
-        title: "",
-        color: "",
-        answers: []
-    }
-    let answer = {
-        text: "",
-        image: "",
-        isCorrectAnswer: Boolean
-    }
-    let level = {
-        title: "",
-        image: "",
-        text: "",
-        minValue: Number
-    }
+                    title: "",
+                    image: "",
+                    questions: [],
+                    levels: []
+                }
+    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
+    quizz.image = comeco.querySelector(".input-url").value //quizz img
+    perguntas.forEach((element) => {
+        let question = {
+            title: "",
+            color: "",
+            answers: []
+        }
+        question.title = element.querySelector(".texto-pergunta").value //coloca o title da questão
+        question.color = element.querySelector(".cor-pergunta").value   // coloca a cor da questão
+        element.document.querySelector(".resposta").forEach((element) => { // função para adicionar as respostas da questão na questão
+            let answer = {
+                text: "",
+                image: "",
+                isCorrectAnswer: ""
+            }
+            answer.text = element.querySelector(".resposta") //texto da resposta
+            answer.image = element.querySelector(".url").value //imagem da resposta
+            if(element.classList.contains("correta")){ //se é a correta isCorrectAnswer = true e false caso contrario
+                answer.isCorrectAnswer = true
+            }
+            else{
+                answer.isCorrectAnswer = false 
+            }
+            perguntas.answers += answer //coloca a resposta na lista de respostas
+        })
+        quizz.questions += question //coloca a questão na lista de questões
+    })
+    niveis.forEach((element) => { //adicionar os niveis
+        let level = {
+            title: "",
+            image: "",
+            text: "",
+            minValue: ""
+            }
+        level.title = element.querySelector(".nivel_titulo")    //atribui valor no objeto level 
+        level.image = element.querySelector(".nivel_img") //atribui valor no objeto level
+        level.text = element.querySelector (".nivel_desc") //atribui valor no objeto level
+        level.minValue = Number(element.querySelector(".nivel_acerto")) //atribui valor no objeto level
+        quizz.levels += level // adiciona o level nos levels do quizz
+    })
+    axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
+    .then(retornaSucesso)
+    .catch(retornaErro)
 }
 
