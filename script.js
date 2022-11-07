@@ -1,3 +1,26 @@
+let id;
+let quizz = {
+    title: "",
+    image: "",
+    questions: [],
+    levels: []
+}
+let question = {
+    title: "",
+    color: "",
+    answers: []
+}
+let answer = {
+    text: "",
+    image: "",
+    isCorrectAnswer: ""
+}
+let level = {
+    title: "",
+    image: "",
+    text: "",
+    minValue: ""
+    }
 //Funções úteis
 const retornaErro = (erro) => {
     console.log(erro.status)
@@ -23,6 +46,20 @@ function listarQuizz(response) {
             <p>${element.title}</p>
         </div>`
     });
+    let quizzid = localStorage.getItem("ids")
+    if(quizzid !== null){
+        const list = JSON.parse(quizzid)
+        list.forEach((element) => {
+            axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${element}`)
+            .then((element) => {
+                document.querySelector(".quizz-container").innerHTML +=
+                    `<div class="go-quizz" onclick="getQuizz(${element.id})">
+                        <img src="${element.image}" alt="">
+                        <p>${element.title}</p>
+                    </div>`
+            })
+        })
+    }
 }
 function atualizarQuizzes() {
     const demanda = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes")
@@ -338,6 +375,7 @@ function validarValoresInputEtapa1(){
     (valoresInputEtapa1.quantidadePerguntas >= 3) ? '' : alert('Digite uma quantidade de perguntas válida (>3)');
     (valoresInputEtapa1.quantidadeNiveis >= 2) ? '' : alert('Digite uma quantidade de níveis válida (>2)');
     if((valoresInputEtapa1.quantidadeNiveis >= 2) && (valoresInputEtapa1.quantidadePerguntas >= 3) && (valoresInputEtapa1.titulo.length >= 20)){
+        registrarComeco();
         exibirCriarPerguntasQuizz();
         console.log(valoresInputEtapa1);
     }
@@ -366,18 +404,18 @@ function exibirCriarPerguntasQuizz() {
                 <input class = "texto-pergunta" placeholder="Título da pergunta" type="text">
                 <input class = "cor-pergunta" placeholder="Cor de fundo da pergunta" type="hexadecimalx ">
                 <h4>Resposta Correta</h4>
-                <input class = "resposta-correta" placeholder="Resposta correta" type="text">
+                <input class = "resposta correta" placeholder="Resposta correta" type="text">
                 <input class = "url-correta" placeholder="URL da resposta correta" type="url">
                 <!-- <input class = "resposta correta" placeholder="Resposta correta" type="text">
                 <input class = "url" placeholder="Descrição do nível" type="text"> -->
                 <h4>Respostas incorretas</h4>
-                <input class = "resposta" placeholder="Resposta incorreta 1" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 1" type="text">
                 <input class = "url" placeholder="URL da imagem 1" type="text">
 
-                <input class = "resposta" placeholder="Resposta incorreta 2" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 2" type="text">
                 <input class = "url" placeholder="URL da imagem 2" type="text">
 
-                <input class = "resposta" placeholder="Resposta incorreta 3" type="text">
+                <input class = "resposta " placeholder="Resposta incorreta 3" type="text">
                 <input class = "url" placeholder="URL da imagem 3" type="text">
             </div>
         </div>
@@ -388,19 +426,31 @@ function exibirCriarPerguntasQuizz() {
 }
 
 function validarInputsPerguntas(){
-    if((document.querySelector('.texto-pergunta').value) &&
-    (document.querySelector('.texto-pergunta').value.length >= 20) &&
-    (document.querySelector('.resposta-correta') != '') &&
-    (document.querySelector('.url-correta') != '') &&
-    (document.querySelector('.resposta-incorreta1') != '') &&
-    (document.querySelector('.url-incorreta1') != '')){
-        exibirCriarNiveisQuizz();
-    }else alert('Preencha os dados corretamente');
+    let i = 0;
+    document.querySelectorAll("perguntas").forEach((element) => {
+        if((element.querySelector('.texto-pergunta').value) && (element.querySelector('.texto-pergunta').value.length >= 20)) {
+            alert('Preencha os dados corretamente')
+        }
+        element.querySelector('.texto-pergunta').querySelectorAll("campos").forEach((element => {
+            if(((element.querySelector('.correta').value != '') &&
+            (element.querySelector('.url').value != '') &&
+            (element.querySelector('.resposta').value != '') &&
+            (element.querySelector('.url').value != '') || i < 2)){
+                alert('Preencha os dados corretamente')
+            }
+            i++;
+        }))
+    })
+    
+    // if((document.querySelector('.texto-pergunta').value) &&
+        registrarPerguntas();
+    //     exibirCriarNiveisQuizz();
+    // }else alert('Preencha os dados corretamente');
 
 }
 
 function exibirCriarNiveisQuizz() {
-    let perguntasQuizz = document.getElementById('perguntas-quizz');
+    let perguntasQuizz = document.getElementById('perguntas');
     perguntasQuizz.classList.add('hidden');
     let main = document.querySelector(".main-content");
     main.innerHTML += `
@@ -443,6 +493,7 @@ function validarInputsNiveis(){
 }
 
 function finalizarQuizz() {
+    registrarNiveis()
     let niveisQuizz = document.getElementById("niveis-quizz");
     niveisQuizz.classList.add('hidden');
     let main = document.querySelector(".main-content");
@@ -463,32 +514,12 @@ function ocultarConteudo2(element){
     element.parentNode.querySelector('.campos').classList.toggle('hidden');
     console.log('aaa');
 }
-function enviarQuizz() {
-    const comeco = document.querySelector(".comeco");
-    const perguntas = document.querySelector(".perguntas");
-    const niveis = document.querySelectorAll(".campos");
-    let quizz = {
-                    title: "",
-                    image: "",
-                    questions: [],
-                    levels: []
-                }
-    quizz.title = valoresInputEtapa1.titulo //quizz titulo
-    quizz.image = valoresInputEtapa1.url //quizz img
+function registrarPerguntas (){
+    const perguntas = document.querySelectorAll(".perguntas");
     perguntas.forEach((element) => {
-        let question = {
-            title: "",
-            color: "",
-            answers: []
-        }
         question.title = element.querySelector(".texto-pergunta").value //coloca o title da questão
         question.color = element.querySelector(".cor-pergunta").value   // coloca a cor da questão
         element.document.querySelector(".resposta").forEach((element) => { // função para adicionar as respostas da questão na questão
-            let answer = {
-                text: "",
-                image: "",
-                isCorrectAnswer: ""
-            }
             answer.text = element.querySelector(".resposta") //texto da resposta
             answer.image = element.querySelector(".url").value //imagem da resposta
             if(element.classList.contains("correta")){ //se é a correta isCorrectAnswer = true e false caso contrario
@@ -498,24 +529,49 @@ function enviarQuizz() {
                 answer.isCorrectAnswer = false 
             }
             perguntas.answers += answer //coloca a resposta na lista de respostas
+            let answer = {
+                text: "",
+                image: "",
+                isCorrectAnswer: ""
+            }
         })
         quizz.questions += question //coloca a questão na lista de questões
     })
+}
+function registrarNiveis (){
+    const niveis = document.querySelectorAll(".campos");
     niveis.forEach((element) => { //adicionar os niveis
-        let level = {
-            title: "",
-            image: "",
-            text: "",
-            minValue: ""
-            }
+        
         level.title = element.querySelector(".nivel_titulo")    //atribui valor no objeto level 
         level.image = element.querySelector(".nivel_img") //atribui valor no objeto level
         level.text = element.querySelector (".nivel_desc") //atribui valor no objeto level
         level.minValue = Number(element.querySelector(".nivel_acerto")) //atribui valor no objeto level
         quizz.levels += level // adiciona o level nos levels do quizz
     })
+}
+function registrarComeco(){
+    const comeco = document.querySelector(".comeco");
+    quizz.title = comeco.querySelector(".input-titulo").value //quizz titulo
+    quizz.image = comeco.querySelector(".input-url").value //quizz img
+}
+function enviarQuizz() {
     axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
-    .then(retornaSucesso)
+    .then((response) => {
+        id = response.data.id
+        let lista = JSON.parse(localStorage.getItem("ids"))
+        if(lista !== null && lista !== undefined){
+            lista += id
+            
+        }
+        else{
+            localStorage.getItem("ids", JSON.stringify([id]))
+        }
+        let question = {
+            title: "",
+            color: "",
+            answers: []
+        }
+   })
     .catch(retornaErro)
 }
 

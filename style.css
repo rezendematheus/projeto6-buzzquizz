@@ -130,7 +130,8 @@ body{
 }
 .go-quizz{
     position: relative;
-    width: 340px;
+    --widthA:32.35%;
+    width: 32.35%;
     height: 181px;
 
     border-radius: 5px;
@@ -150,7 +151,7 @@ body{
 
     bottom:0px;
     left: 17px;
-    overflow-x:auto;
+    overflow-x:hidden;
    
 }
 .go-quizz img{
@@ -475,4 +476,8 @@ h3{
 }
 .oculto:nth-child(0){
     height: 100%;
+}
+.invisivel{
+    position: fixed;
+    opacity: 0;
 }
