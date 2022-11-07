@@ -295,6 +295,11 @@ function fecharQuizz(){
 
 
 //Tela 3
+function criarQuizz(){
+    document.querySelector(".tela-1").classList.toggle("hidden")
+    document.querySelector(".main-content").classList.toggle("hidden")
+    exibirCriarQuizzEtapa1()
+}
 
 function exibirCriarQuizzEtapa1() {
     let main = document.querySelector('.main-content');
@@ -455,7 +460,7 @@ function enviarQuizz() {
         quizz.levels += level // adiciona o level nos levels do quizz
     })
     axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizz)
-    .then(retornaSucesso)
+    .then((response) => {response.data.id})
     .catch(retornaErro)
 }
 

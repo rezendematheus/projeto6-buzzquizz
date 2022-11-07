@@ -132,7 +132,7 @@ body{
     position: relative;
     --widthA:32.35%;
     width: 32.35%;
-    height: var(--widthA) * 53.23%;
+    height: 181px;
 
     border-radius: 5px;
 
